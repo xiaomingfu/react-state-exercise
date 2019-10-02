@@ -1,27 +1,49 @@
 import React, { Component } from 'react';
-import CoinCide from './CoinSide';
+import CoinSide from './CoinSide';
+import generate from '@babel/generator';
+import {choice} from './helper';
 
 class Coin extends Component {
     static defaultProps = {
-        head: "https://tinyurl.com/react-coin-heads-jpg",
-        tail: "https://tinyurl.com/react-coin-tails-jpg",
+        coins: [
+            { side: "head", imgUrl: "https://tinyurl.com/react-coin-heads-jpg"},
+            { side: "tail", imgUrl: "https://tinyurl.com/react-coin-tails-jpg"},
+        ]
     }
     constructor(props){
         super(props);
-        this.state = {flip: 0};
+        this.state = {
+            nFlip: 0,
+            currCoin: null, 
+            sideHead: 0,
+            sideTail: 0
+         };
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick(){
 
+    flipCoin(){
+        const newCoin = choice(this.props.coins);
+        this.setState(st => {
+            return{
+                    currCoin: newCoin,
+                    nFlip: st.nFlip + 1,
+                    sideHead: st.sideHead + (newCoin.side === 'head' ? 1 : 0),
+                    sideTail: st.sideTail + (newCoin.side === 'tail' ? 1 : 0),
+                };
+        });
     }
+    handleClick(e){
+        this.flipCoin();
+    };
+
     render() {
         return (
-            <div>
+            <div className="Coin">
                 <h1>Let's flip a coin!</h1>
-                <CoinCide />
-                <button onClick="handleClick">Flip Me</button>
-                <p>Out of 1 flips, there have been 0 heads and 0 tails.</p>
+                {this.state.currCoin && <CoinSide info={this.state.currCoin} />}
+                <button onClick={this.handleClick}>Flip Me</button>
+                <p>Out of {this.state.nFlip} flips, there have been {this.state.sideHead} heads and {this.state.sideTail} tails.</p>
             </div>
         )
     }

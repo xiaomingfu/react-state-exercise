@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
-import './CoinCide.css';
+import './CoinSide.css';
 
-class CoinCide extends Component{
+class CoinSide extends Component{
     render(){
         return (
             <div className="CoinCide">
-                <img src="https://tinyurl.com/react-coin-heads-jpg"></img>
+                <img src={this.props.info.imgUrl} alt={this.props.info.side} />
+                
             </div>
         )
     }
 }
 
-export default CoinCide;
+export default CoinSide;
